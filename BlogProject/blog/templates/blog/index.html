@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load jalali_tags %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'blog/style.css' %}">
+{% endblock style %}
+
+{% block content %}
+    {% for article in articles %}
+        <div class="card">
+            <div class="card-body">
+                <a href="{{ article.get_absolute_url }}" >
+                    <h5>{{ article.title }}</h5>                
+                </a>
+                <div class="small mb-3">{{ article.publish|to_jalali:'%Y/%m/%d %H:%M:%S' }}</div>
+                <p class="text-justify">{{ article.body|truncatewords:100|safe }}</p>                
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}

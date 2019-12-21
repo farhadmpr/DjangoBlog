@@ -1,0 +1,12 @@
+kind: ExternalService
+name: djangoblog
+spec:
+  image_pull_policy: Always
+  port: 80
+  source:
+    context: .
+    media_path: '/media/'
+    project_type: django
+    python_version: '3.8'
+    static_path: '/static/'
+    wsgi: BlogProject.wsgi
