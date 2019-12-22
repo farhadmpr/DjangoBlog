@@ -7,14 +7,27 @@
 {% endblock style %}
 
 {% block content %}
+    <div class="row mb-5">
+        <div class="col">
+            {% for category in categories %} 
+                <a href="/category/{{ category.id }}">
+                    <span class="badge badge-primary mr-2">{{ category.title }}</span>         
+                </a>                
+            {% endfor %}
+        </div>
+    </div>
+
     {% for article in articles %}
         <div class="card">
             <div class="card-body">
                 <a href="{{ article.get_absolute_url }}" >
                     <h5>{{ article.title }}</h5>                
                 </a>
-                <div class="small mb-3">{{ article.publish|to_jalali:'%Y/%m/%d %H:%M:%S' }}</div>
-                <p class="text-justify">{{ article.body|truncatewords:100|safe }}</p>                
+                <div class="small mb-3">
+                    <span class="badge badge-info">{{ article.category }}</span>                    
+                    <span>{{ article.publish|to_jalali:'%Y/%m/%d %H:%M:%S' }}</span>                                        
+                </div>
+                <div class="text-justify">{{ article.body|truncatewords:100|safe }}</div>                
             </div>
         </div>
     {% endfor %}

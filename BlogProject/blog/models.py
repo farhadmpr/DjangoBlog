@@ -12,6 +12,12 @@ class PublishedArticlesManager(models.Manager):
         return super().get_queryset().filter(status='publish')
 
 
+class Category(models.Model):
+    title = models.CharField(max_length=120)
+    def __str__(self):
+        return self.title
+
+
 class Article(models.Model):
     STATUS = (
         ('draft', 'Draft'),
@@ -21,6 +27,7 @@ class Article(models.Model):
     title = models.CharField(max_length=120)
     slug = models.SlugField(max_length=120, unique=True, allow_unicode=True)
     writer = models.ForeignKey(User, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True)
     # body = models.TextField()
     body = RichTextUploadingField()
     publish = models.DateTimeField(default=datetime.datetime.now)

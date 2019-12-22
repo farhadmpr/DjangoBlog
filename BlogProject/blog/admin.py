@@ -1,16 +1,16 @@
 from django.contrib import admin
-from .models import Article
+from .models import Article, Category
 from jalali_date.admin import ModelAdminJalaliMixin, StackedInlineJalaliMixin, TabularInlineJalaliMixin
 from jalali_date import datetime2jalali, date2jalali
 
 
 # Register your models here.
-
+admin.site.register(Category)
 
 @admin.register(Article)
 # class ArticleAdmin(admin.ModelAdmin):
 class ArticleAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
-    list_display = ('title', 'writer', 'get_publish_jalali', 'status')
+    list_display = ('title', 'category', 'writer', 'get_publish_jalali', 'status')
     list_filter = ('status', 'publish')
     list_editable = ('status',)
     search_fields = ('title', 'writer__username')
