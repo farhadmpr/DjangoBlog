@@ -7,13 +7,22 @@
 {% endblock style %}
 
 {% block content %}
-    <div class="row mb-5">
-        <div class="col">
-            {% for category in categories %} 
-                <a href="/category/{{ category.id }}">
-                    <span class="badge badge-primary mr-2">{{ category.title }}</span>         
-                </a>                
-            {% endfor %}
+    <div class="card">
+        <div class="card-body">
+            <form method="GET" class="form-inline">
+                <div class="form-group">
+                    <input type="Search" class="form-control mr-2" name="search" value="{{ request.GET.search }}" >
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </div>               
+            </form>            
+            <div class="mt-5">
+                <h6>Filter by category: </h6>
+                {% for category in categories %} 
+                    <a href="/category/{{ category.id }}" class="badge badge-success">
+                        {{ category.title }}
+                    </a>                
+                {% endfor %}                    
+            </div>            
         </div>
     </div>
 

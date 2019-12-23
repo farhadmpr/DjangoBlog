@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import Article, Category
@@ -7,8 +8,15 @@ from .models import Article, Category
 
 def index(request):
     # articles = Article.objects.all().filter(status='publish')
-    articles = Article.published.all()
     categories = Category.objects.all()
+
+    search = request.GET.get('search')
+    if search:
+        lookups = Q(title__contains=search) | Q(body__contains=search)
+        articles = Article.published.filter(lookups).distinct().order_by('-publish')
+    else:
+        articles = Article.published.all().order_by('-publish')
+    
     return render(request, 'blog/index.html', {'articles': articles, 'categories': categories})
 
 
