@@ -28,6 +28,7 @@ class Article(models.Model):
     slug = models.SlugField(max_length=120, unique=True, allow_unicode=True)
     writer = models.ForeignKey(User, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True)
+    view_count = models.IntegerField(default=0, editable=False)
     # body = models.TextField()
     body = RichTextUploadingField()
     publish = models.DateTimeField(default=datetime.datetime.now)

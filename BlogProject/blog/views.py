@@ -13,20 +13,23 @@ def index(request):
     search = request.GET.get('search')
     if search:
         lookups = Q(title__contains=search) | Q(body__contains=search)
-        articles = Article.published.filter(lookups).distinct().order_by('-publish')
+        articles = Article.published.filter(
+            lookups).distinct().order_by('-publish')
     else:
         articles = Article.published.all().order_by('-publish')
-    
-    return render(request, 'blog/index.html', {'articles': articles, 'categories': categories})
 
-
-def categories(request, id):
-    articles = Article.published.all().filter(category=id)
-    categories = Category.objects.all()
     return render(request, 'blog/index.html', {'articles': articles, 'categories': categories})
 
 
 @login_required()
 def details(request, id, slug):
     article = get_object_or_404(Article, id=id, slug=slug)
+    article.view_count += 1
+    article.save()
     return render(request, 'blog/details.html', {'article': article})
+
+
+def categories(request, id):
+    articles = Article.published.all().filter(category=id)
+    categories = Category.objects.all()
+    return render(request, 'blog/index.html', {'articles': articles, 'categories': categories})

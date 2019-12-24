@@ -34,7 +34,8 @@
                 </a>
                 <div class="small mb-3">
                     <span class="badge badge-info">{{ article.category }}</span>                    
-                    <span>{{ article.publish|to_jalali:'%Y/%m/%d %H:%M:%S' }}</span>                                        
+                    <span class="badge badge-info">{{ article.view_count }} visit</span>                    
+                    <span>{{ article.publish|to_jalali:'%Y/%m/%d %H:%M:%S' }}</span>                                                            
                 </div>
                 <div class="text-justify">{{ article.body|truncatewords:100|safe }}</div>                
             </div>
