@@ -11,6 +11,18 @@
             <p class="text-justify">
                 {{ article.body|safe }}
             </p>
+            <hr>
+            <h3>Comments</h3>
+            <br>
+            {% for comment in comments %}
+                <p>{{ comment.message }}</p>
+            {% endfor %}
+            <br>
+            <form action="" method="post">
+                {% csrf_token %}
+                <textarea class="form-control mb-2 col-5" rows="5" type="text" name="message"></textarea>
+                <input type="submit" value="Send" class="btn btn-primary" />
+            </form>            
         </div>    
     </div>
 {% endblock %}

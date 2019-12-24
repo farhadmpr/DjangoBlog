@@ -1,7 +1,8 @@
 from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .models import Article, Category
+from .models import Article, Category, Comment
+from .forms import CommentForm
 
 # Create your views here.
 
@@ -26,7 +27,16 @@ def details(request, id, slug):
     article = get_object_or_404(Article, id=id, slug=slug)
     article.view_count += 1
     article.save()
-    return render(request, 'blog/details.html', {'article': article})
+
+    if request.method == 'POST':
+       form = CommentForm(request.POST) 
+       if form.is_valid():
+           message = form.cleaned_data['message']
+           comment = Comment(message=message, writer=request.user, article=article)
+           comment.save()
+    
+    comments = Comment.objects.filter(article=article.id)
+    return render(request, 'blog/details.html', {'article': article, 'comments': comments})
 
 
 def categories(request, id):

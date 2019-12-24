@@ -14,6 +14,7 @@ class PublishedArticlesManager(models.Manager):
 
 class Category(models.Model):
     title = models.CharField(max_length=120)
+
     def __str__(self):
         return self.title
 
@@ -40,3 +41,9 @@ class Article(models.Model):
 
     def get_absolute_url(self):
         return reverse('blog:details', args=[self.id, self.slug])
+
+
+class Comment(models.Model):
+    writer = models.ForeignKey(User, on_delete=models.CASCADE)
+    article = models.ForeignKey(Article, on_delete=models.CASCADE)
+    message = models.CharField(max_length=500)
