@@ -25,6 +25,7 @@ def index(request):
 @login_required()
 def details(request, id, slug):
     article = get_object_or_404(Article, id=id, slug=slug)
+    comments = article.comments.all().order_by('created')
     article.view_count += 1
     article.save()
 
@@ -34,9 +35,8 @@ def details(request, id, slug):
            message = form.cleaned_data['message']
            comment = Comment(message=message, writer=request.user, article=article)
            comment.save()
-    
-    comments = Comment.objects.filter(article=article.id)
-    return render(request, 'blog/details.html', {'article': article, 'comments': comments})
+        
+    return render(request, 'blog/details.html', {'article': article, 'comments': comments })
 
 
 def categories(request, id):

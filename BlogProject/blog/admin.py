@@ -1,11 +1,12 @@
 from django.contrib import admin
-from .models import Article, Category
+from .models import Article, Category, Comment
 from jalali_date.admin import ModelAdminJalaliMixin, StackedInlineJalaliMixin, TabularInlineJalaliMixin
 from jalali_date import datetime2jalali, date2jalali
 
 
 # Register your models here.
 admin.site.register(Category)
+admin.site.register(Comment)
 
 @admin.register(Article)
 # class ArticleAdmin(admin.ModelAdmin):
