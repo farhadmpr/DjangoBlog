@@ -18,8 +18,11 @@
             {% for comment in comments %}
                 <div class="card">
                     <div class="card-body">
-                        <span class=" text-muted font-weight-normal card-title">
+                        <span class=" text-muted card-title">
                             {{ comment.created | to_jalali:'%Y/%m/%d %H:%M:%S' }}
+                        </span>                
+                        <span class=" text-muted card-title ml-3">
+                            {{ comment.writer.username }} :
                         </span>                
                         <p class="card-text text-">{{ comment.message | linebreaks }}</p>
                     </div>
