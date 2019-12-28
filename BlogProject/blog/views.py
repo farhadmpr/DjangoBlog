@@ -1,7 +1,7 @@
 from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .models import Article, Category, Comment
+from .models import Article, Category, Comment, Tag
 from .forms import CommentForm
 
 # Create your views here.
@@ -12,7 +12,16 @@ def index(request):
     categories = Category.objects.all()
 
     search = request.GET.get('search')
-    if search:
+    tag_id = request.GET.get('tag')
+    
+    if tag_id:
+        #tag = Tag.objects.get(id=tag_id)
+        tag = Tag.objects.filter(id=tag_id).first()
+        if tag:            
+            articles = tag.article_set.filter(status='publish').all()
+        else:
+            articles = None
+    elif search:
         lookups = Q(title__contains=search) | Q(body__contains=search)
         articles = Article.published.filter(
             lookups).distinct().order_by('-publish')

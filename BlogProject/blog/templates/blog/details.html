@@ -14,7 +14,7 @@
                 <h5>Tags:</h5>
                 <div>
                     {% for tag in article.tags.all %}
-                        <a href="#" class="badge badge-pill badge-info">{{ tag.title }}</a>
+                        <a href="/?tag={{ tag.id }}" class="badge badge-pill badge-info">{{ tag.title }}</a>
                     {% endfor %}
                 </div>                
             </p>            
