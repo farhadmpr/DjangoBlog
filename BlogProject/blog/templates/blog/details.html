@@ -11,7 +11,13 @@
             <hr>
             <p class="text-justify">
                 {{ article.body|safe }}
-            </p>
+                <h5>Tags:</h5>
+                <div>
+                    {% for tag in article.tags.all %}
+                        <a href="#" class="badge badge-pill badge-info">{{ tag.title }}</a>
+                    {% endfor %}
+                </div>                
+            </p>            
             <hr>
             <h3>Comments</h3>
             <br>
@@ -26,7 +32,7 @@
                         </div>                               
                         <p class="card-text text-">{{ comment.message | linebreaks }}</p>
                     </div>
-                </div >
+                </div>
                 <br>
             {% endfor %}
             <br>
