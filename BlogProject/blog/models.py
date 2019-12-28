@@ -19,6 +19,13 @@ class Category(models.Model):
         return self.title
 
 
+class Tag(models.Model):
+    title = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.title
+
+
 class Article(models.Model):
     STATUS = (
         ('draft', 'Draft'),
@@ -29,6 +36,7 @@ class Article(models.Model):
     slug = models.SlugField(max_length=120, unique=True, allow_unicode=True)
     writer = models.ForeignKey(User, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True)
+    tags = models.ManyToManyField(Tag)
     view_count = models.IntegerField(default=0, editable=False)
     # body = models.TextField()
     body = RichTextUploadingField()
@@ -45,7 +53,8 @@ class Article(models.Model):
 
 class Comment(models.Model):
     writer = models.ForeignKey(User, on_delete=models.CASCADE)
-    article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='comments')
+    article = models.ForeignKey(
+        Article, on_delete=models.CASCADE, related_name='comments')
     created = models.DateTimeField(auto_now_add=True)
     message = models.CharField(max_length=500)
 
