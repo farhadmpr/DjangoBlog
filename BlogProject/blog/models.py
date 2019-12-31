@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 import datetime
 from django.urls import reverse
 from ckeditor_uploader.fields import RichTextUploadingField
+from django.utils.text import slugify
 
 # Create your models here.
 
@@ -49,6 +50,7 @@ class Article(models.Model):
 
     def get_absolute_url(self):
         return reverse('blog:details', args=[self.id, self.slug])
+        #return reverse('blog:details', args=[self.id, slugify(self.slug, allow_unicode=True) ])
 
 
 class Comment(models.Model):
