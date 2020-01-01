@@ -5,7 +5,38 @@
     <br>
     <form action="" method="post">
         {% csrf_token %}
-        {{ form.as_p }}
+        {% comment %} {{ form.as_p }} {% endcomment %}
+
+        <div>
+            {{ form.non_field_errors }}
+        </div>
+
+        <div>            
+            <label for="{{ form.username.id_for_label }}">نام کاربری</label>
+            {{ form.username.errors }}
+            {{ form.username }}
+        </div>
+
+        <div>            
+            <label for="{{ form.email.id_for_label }}">ایمیل</label>
+            {{ form.email.errors }}
+            {{ form.email }}
+        </div>
+
+        <div>            
+            <label for="{{ form.password1.id_for_label }}">رمز عبور</label>
+            {{ form.password1.errors }}
+            {{ form.password1 }}
+        </div>
+
+        <div>            
+            <label for="{{ form.password2.id_for_label }}">تکرار رمز عبور</label>
+            {{ form.password2.errors }}
+            {{ form.password2 }}
+        </div>
+        
+        <br>
+        
         <input type="submit" value="Register" class="btn btn-primary" />
     </form>
 {% endblock content %}
