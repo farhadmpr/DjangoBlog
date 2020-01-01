@@ -18,11 +18,20 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+from rest_framework import routers
+from blog import views
+
+router = routers.DefaultRouter()
+router.register(r'articles', views.ArticleViewSet)
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('blog.urls', namespace='blog')),
     path('accounts/', include('accounts.urls', namespace='accounts')),
     path('ckeditor/', include('ckeditor_uploader.urls')),
-] #+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) # in development
 
+    path('api/', include(router.urls)),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 
+]  # + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) # in development

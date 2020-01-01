@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'ckeditor',
     'ckeditor_uploader',
     'jalali_date',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -122,26 +123,26 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-STATIC_ROOT = 'static' #os.path.join(BASE_DIR, 'static/')
+STATIC_ROOT = 'static'  # os.path.join(BASE_DIR, 'static/')
 STATIC_URL = '/static/'
 
 STATIC_DIR = [
     os.path.join(BASE_DIR, 'static'),
-    #'/static/',
+    # '/static/',
 ]
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 MEDIA_URL = '/media/'
 
 CKEDITOR_UPLOAD_PATH = 'uploads/'
-CKEDITOR_CONFIGS =  {
+CKEDITOR_CONFIGS = {
     'default': {
         'toolbar': 'full',
     }
 }
 
 JALALI_DATE_DEFAULTS = {
-   'Strftime': {
+    'Strftime': {
         'date': '%y/%m/%d',
         'datetime': '%H:%M:%S _ %y/%m/%d',
     },
@@ -165,4 +166,14 @@ JALALI_DATE_DEFAULTS = {
             ]
         }
     },
+}
+
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10,
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
 }

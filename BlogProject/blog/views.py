@@ -4,6 +4,9 @@ from django.contrib.auth.decorators import login_required
 from .models import Article, Category, Comment, Tag
 from .forms import CommentForm
 
+from rest_framework import viewsets
+from .serializers import ArticleSerializer
+
 # Create your views here.
 
 
@@ -53,3 +56,8 @@ def categories(request, id):
     articles = Article.published.all().filter(category=id)
     categories = Category.objects.all()
     return render(request, 'blog/index.html', {'articles': articles, 'categories': categories})
+
+
+class ArticleViewSet(viewsets.ModelViewSet):
+    queryset = Article.objects.all()#.order_by('-created')
+    serializer_class = ArticleSerializer
