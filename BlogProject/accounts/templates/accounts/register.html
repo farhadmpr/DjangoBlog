@@ -7,36 +7,36 @@
         {% csrf_token %}
         {% comment %} {{ form.as_p }} {% endcomment %}
 
-        <div>
+        <div class = "text-danger">
             {{ form.non_field_errors }}
         </div>
 
-        <div>            
-            <label for="{{ form.username.id_for_label }}">نام کاربری</label>
+        <div class="form-group">            
+            <label for="{{ form.username.id_for_label }}" class="col-md-2 control-label">نام کاربری</label>
             {{ form.username.errors }}
             {{ form.username }}
         </div>
 
-        <div>            
-            <label for="{{ form.email.id_for_label }}">ایمیل</label>
+        <div class="form-group">            
+            <label for="{{ form.email.id_for_label }}" class="col-md-2 control-label">ایمیل</label>
             {{ form.email.errors }}
             {{ form.email }}
         </div>
 
-        <div>            
-            <label for="{{ form.password1.id_for_label }}">رمز عبور</label>
+        <div class="form-group">            
+            <label for="{{ form.password1.id_for_label }}" class="col-md-2 control-label">رمز عبور</label>
             {{ form.password1.errors }}
             {{ form.password1 }}
         </div>
 
-        <div>            
-            <label for="{{ form.password2.id_for_label }}">تکرار رمز عبور</label>
+        <div class="form-group">            
+            <label for="{{ form.password2.id_for_label }}" class="col-md-2 control-label">تکرار رمز عبور</label>
             {{ form.password2.errors }}
             {{ form.password2 }}
         </div>
         
         <br>
-        
+
         <input type="submit" value="Register" class="btn btn-primary" />
     </form>
 {% endblock content %}
