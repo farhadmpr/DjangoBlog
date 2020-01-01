@@ -2,8 +2,13 @@ from django import forms
 from django.contrib.auth.models import User
 
 
-class UserLoginForm(forms.Form):
-    username = forms.CharField(max_length=30, widget=forms.TextInput(
+errors = {
+    'required': 'این فیلد را حتما وارد کنید',
+    'max_length': 'تعداد حروف بیش از حد است',
+}
+
+class UserLoginForm(forms.Form):    
+    username = forms.CharField(max_length=30, error_messages=errors, widget=forms.TextInput(
         attrs={
             'class': 'form-control',
             'placeholder': 'enter your username',

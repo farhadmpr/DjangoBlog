@@ -7,6 +7,6 @@ urlpatterns = [
     path('category/<int:id>/', views.categories, name='categories'),
     # path('details/<int:id>/<slug:slug>/', views.details, name='details'),
     # https://stackoverflow.com/questions/55175353/django-slug-url-in-perisan-404
-    re_path('details/(?P<id>[0-9]+)/(?P<slug>[\w-]+)/', views.details, name='details'),
+    re_path('details/(?P<id>[0-9]+)/(?P<slug>[\\w-]+)/', views.details, name='details'),
 
 ]

@@ -13,11 +13,11 @@ def index(request):
 
     search = request.GET.get('search')
     tag_id = request.GET.get('tag')
-    
+
     if tag_id:
         #tag = Tag.objects.get(id=tag_id)
         tag = Tag.objects.filter(id=tag_id).first()
-        if tag:            
+        if tag:
             articles = tag.article_set.filter(status='publish').all()
         else:
             articles = None
@@ -39,13 +39,14 @@ def details(request, id, slug):
     article.save()
 
     if request.method == 'POST':
-       form = CommentForm(request.POST) 
-       if form.is_valid():
-           message = form.cleaned_data['message']
-           comment = Comment(message=message, writer=request.user, article=article)
-           comment.save()
-        
-    return render(request, 'blog/details.html', {'article': article, 'comments': comments })
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            message = form.cleaned_data['message']
+            comment = Comment(
+                message=message, writer=request.user, article=article)
+            comment.save()
+
+    return render(request, 'blog/details.html', {'article': article, 'comments': comments})
 
 
 def categories(request, id):
