@@ -3,7 +3,6 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib import messages
 from .forms import UserLoginForm, UserRegisterForm
-from .models import Profile
 
 # Create your views here.
 
@@ -40,13 +39,11 @@ def user_register(request):
                     request, 'The username has already been taken', extra_tags='danger')
                 return redirect('accounts:user_register')
             except User.DoesNotExist:
-                user = User.objects.create_user(
+                User.objects.create_user(
                     cd['username'],
                     cd['email'],
                     cd['password1'],
                 )
-                profile = Profile(user=user)
-                profile.save()
                 messages.success(request, 'Register success',
                                  extra_tags='success')
                 return redirect('accounts:user_login')
