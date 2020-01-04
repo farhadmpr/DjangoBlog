@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -56,3 +56,8 @@ def user_logout(request):
     logout(request)
     messages.success(request, 'Logout success', 'success')
     return redirect('blog:index')
+
+
+def user_profile(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    return render(request, 'accounts/profile.html', { 'user': user })

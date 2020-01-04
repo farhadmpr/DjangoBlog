@@ -6,7 +6,7 @@
         <div class="card-body">
             <h3>{{ article.title }}</h3>
             <small class="badge badge-info">Published: {{ article.publish|timesince }}</small>
-            <small class="badge badge-info">Writer: {{ article.writer }}</small>
+            <small class="badge badge-info">Writer: <a class="text-white" href="{% url 'accounts:profile' article.writer.id %}">{{ article.writer }}</a></small>
             <small class="badge badge-info">Visit: {{ article.view_count }}</small>
             <hr>
             <p class="text-justify">
@@ -25,7 +25,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="card-title font-weight-bold">
-                            {{ comment.writer.username }}
+                             <a class="" href="{% url 'accounts:profile' comment.writer.id %}">{{ comment.writer.username }}</a>
                         </div> 
                         <div class=" text-muted card-title">
                             {{ comment.created | to_jalali:'%Y/%m/%d %H:%M:%S' }}
