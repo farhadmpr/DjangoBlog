@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib import messages
 from .forms import UserLoginForm, UserRegisterForm
+from blog.models import Article
 
 # Create your views here.
 
@@ -18,7 +19,7 @@ def user_login(request):
                 login(request, user)
                 messages.success(request, 'Login success',
                                  extra_tags='success')
-                #return redirect('blog:index')
+                # return redirect('blog:index')
                 return redirect(request.GET.get('next', 'blog:index'))
             else:
                 messages.error(request, 'Login fail', extra_tags='danger')
@@ -60,4 +61,5 @@ def user_logout(request):
 
 def user_profile(request, user_id):
     user = get_object_or_404(User, id=user_id)
-    return render(request, 'accounts/profile.html', { 'user': user })
+    articles = Article.published.filter(writer=user)
+    return render(request, 'accounts/profile.html', {'user': user, 'articles': articles})

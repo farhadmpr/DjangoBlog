@@ -2,4 +2,13 @@
 
 {% block content %}
     <h3>{{ user.username }} profile</h3>
+    <p>{{ user.profile.bio }}</p>
+    <hr>
+    <ul>
+        {% for article in articles %}
+            <li><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></li>
+        {% empty %}
+            <div class="alert alert-info">این کاربر هیچ نوشته ای ندارد</div>
+        {% endfor %}
+    </ul>
 {% endblock content %}
