@@ -1,8 +1,10 @@
 from django.db.models import Q
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Article, Category, Comment, Tag
-from .forms import CommentForm
+from .forms import CommentForm, AddArticleForm
+from django.utils.text import slugify
+from django.contrib import messages
 
 from rest_framework import viewsets
 from .serializers import ArticleSerializer
@@ -58,6 +60,24 @@ def categories(request, id):
     return render(request, 'blog/index.html', {'articles': articles, 'categories': categories})
 
 
+@login_required
+def add_article(request):
+    if request.method == 'POST':
+        form = AddArticleForm(request.POST)
+        if form.is_valid():
+            article = form.save(commit=False)
+            article.writer = request.user
+            article.slug = slugify(form.cleaned_data['title'][:30], allow_unicode=True)
+            tags = form.cleaned_data['tags']
+            article.save()   
+            article.tags.add(*tags)            
+            messages.success(request, 'نوشته با موفقیت ذخیره شد', 'success')
+            return redirect('accounts:profile', request.user.id)
+    else:
+        form = AddArticleForm()
+    return render(request, 'blog/add_article.html', {'form': form})
+
+
 class ArticleViewSet(viewsets.ModelViewSet):
-    queryset = Article.objects.all()#.order_by('-created')
+    queryset = Article.objects.all()  # .order_by('-created')
     serializer_class = ArticleSerializer

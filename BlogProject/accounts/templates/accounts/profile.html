@@ -4,6 +4,7 @@
     <h3>{{ user.username }} profile</h3>
     <p>{{ user.profile.bio }}</p>
     <hr>
+    <a href="{% url 'blog:add_article' %}" class="btn btn-primary mb-3">نوشته جدید</a>    
     <ul>
         {% for article in articles %}
             <li><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></li>
