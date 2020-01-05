@@ -71,7 +71,7 @@ def add_article(request):
             tags = form.cleaned_data['tags']
             article.save()   
             article.tags.add(*tags)            
-            messages.success(request, 'نوشته با موفقیت ذخیره شد', 'success')
+            messages.success(request, 'نوشته با موفقیت ذخیره شد و بعد از تایید مدیر نمایش داده خواهد شد', 'success')
             return redirect('accounts:profile', request.user.id)
     else:
         form = AddArticleForm()

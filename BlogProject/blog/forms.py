@@ -13,13 +13,26 @@ class CommentForm(forms.Form):
     ))
 
 
-class AddArticleForm(forms.ModelForm):
+class AddArticleForm(forms.ModelForm):   
+    # Because I can't change ckeditor RichTextUploadingField with widget
+    # I used this way to override it in textarea
+    def __init__(self, *args, **kwargs):
+        super(AddArticleForm, self).__init__(*args, **kwargs)
+        self.fields['body'].widget = forms.Textarea(attrs={'class': 'form-control'})
+
+
     class Meta:
         model = Article
-        fields = ('title', 'category', 'body', 'tags',)
+        fields = ('title', 'category', 'tags', 'body' )
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             'category': forms.Select(attrs={'class': 'form-control'}),
-            'body': forms.Textarea(),
             'tags': forms.SelectMultiple(attrs={'class': 'form-control'}),
         }
+        labels = {
+            'title':'عنوان',
+            'category':'دسته',
+            'tags':'تگ',
+            'body':'متن',
+        }
+    
