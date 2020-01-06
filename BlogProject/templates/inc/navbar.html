@@ -11,6 +11,9 @@
       {% if request.user.is_authenticated %}
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
+            <a class="nav-link" href="{% url 'blog:add_article' %}">New Post</a>
+          </li>        
+          <li class="nav-item">
             <a class="nav-link" href="{% url 'accounts:user_logout' %}">Logout</a>
           </li>
         </ul>      

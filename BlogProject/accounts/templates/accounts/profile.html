@@ -4,10 +4,16 @@
     <h3>{{ user.username }} profile</h3>
     <p>{{ user.profile.bio }}</p>
     <hr>
-    <a href="{% url 'blog:add_article' %}" class="btn btn-primary mb-3">نوشته جدید</a>    
+    <h5>Posts:</h5>
     <ul>
         {% for article in articles %}
-            <li><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></li>
+            <li class="mb-1">
+                {% if request.user.is_authenticated and request.user.id == article.writer.id  %}
+                    <a class="btn btn-info btn-sm" href="{% url 'blog:edit_article' article.id %}">Edit</a>
+                    <a class="btn btn-danger btn-sm" href="{% url 'blog:delete_article' article.id %}">Delete</a> 
+                {% endif %}            
+                <a href="{{ article.get_absolute_url }}">{{ article.title }}</a>
+            </li>
         {% empty %}
             <div class="alert alert-info">این کاربر هیچ نوشته ای ندارد</div>
         {% endfor %}

@@ -2,7 +2,7 @@ from django.db.models import Q
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Article, Category, Comment, Tag
-from .forms import CommentForm, AddArticleForm
+from .forms import CommentForm, AddArticleForm, EditArticleForm
 from django.utils.text import slugify
 from django.contrib import messages
 
@@ -67,15 +67,49 @@ def add_article(request):
         if form.is_valid():
             article = form.save(commit=False)
             article.writer = request.user
-            article.slug = slugify(form.cleaned_data['title'][:30], allow_unicode=True)
+            article.slug = slugify(
+                form.cleaned_data['title'][:30], allow_unicode=True)
             tags = form.cleaned_data['tags']
-            article.save()   
-            article.tags.add(*tags)            
-            messages.success(request, 'نوشته با موفقیت ذخیره شد و بعد از تایید مدیر نمایش داده خواهد شد', 'success')
+            article.save()
+            article.tags.add(*tags)
+            messages.success(
+                request, 'نوشته با موفقیت ذخیره شد و بعد از تایید مدیر نمایش داده خواهد شد', 'success')
             return redirect('accounts:profile', request.user.id)
     else:
         form = AddArticleForm()
     return render(request, 'blog/add_article.html', {'form': form})
+
+
+@login_required
+def edit_article(request, article_id):
+    article = get_object_or_404(Article, id=article_id)
+    if request.user.id == article.writer.id:
+        if request.method == 'POST':
+            form = EditArticleForm(request.POST, instance=article)
+            if form.is_valid():
+                article = form.save(commit=False)
+                article.slug = slugify(
+                    form.cleaned_data['title'][:30], allow_unicode=True)
+                tags = form.cleaned_data['tags']
+                article.tags.clear()
+                article.save()
+                article.tags.add(*tags)
+                messages.success(
+                    request, 'نوشته با موفقیت ویرایش شد', 'success')
+                return redirect('accounts:profile', request.user.id)
+        else:
+            form = EditArticleForm(instance=article)
+        return render(request, 'blog/edit_article.html', {'form': form})
+    return redirect('accounts:profile', request.user.id)
+
+
+@login_required
+def delete_article(request, article_id):
+    article = Article.objects.get(id=article_id)
+    if request.user.id == article.writer.id:
+        article.delete()
+        messages.success(request, 'با موفقیت حذف شد', 'danger')
+    return redirect('accounts:profile', request.user.id)
 
 
 class ArticleViewSet(viewsets.ModelViewSet):

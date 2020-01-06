@@ -9,4 +9,6 @@ urlpatterns = [
     # https://stackoverflow.com/questions/55175353/django-slug-url-in-perisan-404
     re_path('details/(?P<id>[0-9]+)/(?P<slug>[\\w-]+)/', views.details, name='details'),
     path('add_article/', views.add_article, name='add_article'),
+    path('edit_article/<int:article_id>', views.edit_article, name='edit_article'),
+    path('delete_article/<int:article_id>', views.delete_article, name='delete_article'),
 ]
