@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
-from .forms import UserLoginForm, UserRegisterForm
+from .forms import UserLoginForm, UserRegisterForm, EditProfileForm
 from blog.models import Article
 
 # Create your views here.
@@ -62,4 +63,21 @@ def user_logout(request):
 def user_profile(request, user_id):
     user = get_object_or_404(User, id=user_id)
     articles = Article.published.filter(writer=user)
-    return render(request, 'accounts/profile.html', {'user': user, 'articles': articles})
+    is_profile_owner = request.user.is_authenticated and request.user.id == user.id
+    return render(request, 'accounts/profile.html',
+                  {
+                      'user': user,
+                      'articles': articles,
+                      'is_profile_owner': is_profile_owner
+                  })
+
+
+@login_required
+def edit_profile(request, user_id):
+    user = get_object_or_404(User, pk=user_id)
+    if request.method == 'POST':
+        # TODO
+        pass
+    else:
+        form = EditProfileForm(instance=user.profile)
+    return render(request, 'accounts/edit_profile.html', {'form': form})
