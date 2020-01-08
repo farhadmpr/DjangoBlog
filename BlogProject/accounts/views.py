@@ -76,8 +76,11 @@ def user_profile(request, user_id):
 def edit_profile(request, user_id):
     user = get_object_or_404(User, pk=user_id)
     if request.method == 'POST':
-        # TODO
-        pass
+        form = EditProfileForm(request.POST, instance=user.profile)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'پروفایل با موفقیت ویرایش شد', 'success')
+            return redirect('accounts:profile', user_id)
     else:
         form = EditProfileForm(instance=user.profile)
     return render(request, 'accounts/edit_profile.html', {'form': form})
