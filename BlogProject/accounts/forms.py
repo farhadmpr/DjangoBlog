@@ -8,7 +8,8 @@ errors = {
     'max_length': 'تعداد حروف بیش از حد است',
 }
 
-class UserLoginForm(forms.Form):    
+
+class UserLoginForm(forms.Form):
     username = forms.CharField(max_length=30, error_messages=errors, widget=forms.TextInput(
         attrs={
             'class': 'form-control',
@@ -38,7 +39,7 @@ class UserRegisterForm(forms.Form):
         }
     ))
     password1 = forms.CharField(label='Password', max_length=50, widget=forms.PasswordInput(
-        attrs={            
+        attrs={
             'class': 'form-control',
             'placeholder': 'enter your password',
         }))
@@ -60,7 +61,7 @@ class UserRegisterForm(forms.Form):
     #     p1 = self.cleaned_data['password1']
     #     p2 = self.cleaned_data['password2']
     #     if p1 != p2:
-    #         raise forms.ValidationError('passwords not same')        
+    #         raise forms.ValidationError('passwords not same')
     #     return p1
 
     # form level
@@ -75,6 +76,11 @@ class UserRegisterForm(forms.Form):
 
 class EditProfileForm(forms.ModelForm):
     email = forms.EmailField()
+
     class Meta:
         model = Profile
         fields = ('bio', 'age', 'mobile')
+
+
+class MobileLoginForm(forms.Form):
+    mobile = forms.IntegerField()

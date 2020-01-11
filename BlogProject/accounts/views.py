@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
-from .forms import UserLoginForm, UserRegisterForm, EditProfileForm
+from .forms import UserLoginForm, UserRegisterForm, EditProfileForm, MobileLoginForm
 from blog.models import Article
 
 # Create your views here.
@@ -86,3 +86,11 @@ def edit_profile(request, user_id):
     else:
         form = EditProfileForm(instance=user.profile, initial={'email':user.email})
     return render(request, 'accounts/edit_profile.html', {'form': form})
+
+
+def mobile_login(request):
+    if request.method == 'POST':
+        pass
+    else:
+        form = MobileLoginForm()
+    return render(request, 'accounts/mobile_login.html', {'form':form})
