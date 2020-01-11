@@ -10,6 +10,7 @@ from random import randint
 from kavenegar import *
 from django.conf import settings
 from django import forms
+from django.http import JsonResponse
 
 # Create your views here.
 
@@ -66,10 +67,11 @@ def user_logout(request):
 
 
 def user_profile(request, user_id):
-    user = get_object_or_404(User, id=user_id)    
+    user = get_object_or_404(User, id=user_id)
     articles = Article.published.filter(writer=user)
     is_profile_owner = request.user.is_authenticated and request.user.id == user.id
-    is_following = UserRelation.objects.filter(from_user=request.user, to_user=user).exists()
+    is_following = UserRelation.objects.filter(
+        from_user=request.user, to_user=user).exists()
     return render(request, 'accounts/profile.html',
                   {
                       'user': user,
@@ -134,9 +136,29 @@ def mobile_verify(request, mobile, verify_code):
     return render(request, 'accounts/mobile_verify.html', {'form': form})
 
 
+@login_required
 def follow(request):
-    pass
+    if request.method == 'POST':
+        user_id = request.POST['user_id']
+        to_user = get_object_or_404(User, pk=user_id)
+        check_relation = UserRelation.objects.filter(
+            from_user=request.user, to_user=to_user)
+        if check_relation.exists():
+            return JsonResponse({'status':'false'})
+        else:
+            UserRelation(from_user=request.user, to_user=to_user).save()
+            return JsonResponse({'status':'true'})
 
 
+@login_required
 def unfollow(request):
-    pass
+    if request.method == 'POST':
+        user_id = request.POST['user_id']
+        to_user = get_object_or_404(User, pk=user_id)
+        check_relation = UserRelation.objects.filter(
+            from_user=request.user, to_user=to_user)
+        if check_relation.exists():
+            check_relation.delete()
+            return JsonResponse({'status':'true'})
+        else:            
+            return JsonResponse({'status':'false'})
