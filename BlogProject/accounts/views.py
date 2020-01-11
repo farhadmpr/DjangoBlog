@@ -79,6 +79,9 @@ def user_profile(request, user_id):
 @login_required
 def edit_profile(request, user_id):
     user = get_object_or_404(User, pk=user_id)
+    if request.user.id != user.id:
+        messages.error(request, 'شما اجازه این کار را ندارید', 'danger')
+        return redirect('accounts:profile', user_id)
     if request.method == 'POST':
         form = EditProfileForm(request.POST, instance=user.profile)
         if form.is_valid():
