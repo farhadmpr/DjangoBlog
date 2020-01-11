@@ -136,18 +136,19 @@ def mobile_verify(request, mobile, verify_code):
     return render(request, 'accounts/mobile_verify.html', {'form': form})
 
 
+def get_user_relation(from_user, to_user):
+    return UserRelation.objects.filter(from_user=from_user, to_user=to_user)
+
+
 @login_required
 def follow(request):
     if request.method == 'POST':
         user_id = request.POST['user_id']
         to_user = get_object_or_404(User, pk=user_id)
-        check_relation = UserRelation.objects.filter(
-            from_user=request.user, to_user=to_user)
-        if check_relation.exists():
-            return JsonResponse({'status':'false'})
-        else:
-            UserRelation(from_user=request.user, to_user=to_user).save()
-            return JsonResponse({'status':'true'})
+        if get_user_relation(request.user, to_user).exists():
+            return JsonResponse({'status': 'false'})
+        UserRelation(from_user=request.user, to_user=to_user).save()
+        return JsonResponse({'status': 'true'})
 
 
 @login_required
@@ -155,10 +156,8 @@ def unfollow(request):
     if request.method == 'POST':
         user_id = request.POST['user_id']
         to_user = get_object_or_404(User, pk=user_id)
-        check_relation = UserRelation.objects.filter(
-            from_user=request.user, to_user=to_user)
-        if check_relation.exists():
-            check_relation.delete()
-            return JsonResponse({'status':'true'})
-        else:            
-            return JsonResponse({'status':'false'})
+        relation = get_user_relation(request.user, to_user)
+        if relation.exists():
+            relation.delete()
+            return JsonResponse({'status': 'true'})
+        return JsonResponse({'status': 'false'})

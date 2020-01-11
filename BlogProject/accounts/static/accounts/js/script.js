@@ -33,19 +33,16 @@ $(function() {
 
     let user_id = $(this).data("id");
     let action = $(this).attr("data-action");
-    let url = "";
-    let text = "";
-    let cssClass = "";
+    let url = "/accounts/unfollow/";
+    let text = "Follow";
+    let cssClass = "btn btn-primary";
 
     if (action == "follow") {
       url = "/accounts/follow/";
       text = "Unfollow";
-      cssClass = "btn-secondary";
+      cssClass = "btn btn-secondary";
       action = "unfollow";
     } else {
-      url = "/accounts/unfollow/";
-      text = "Follow";
-      cssClass = "btn-primary";
       action = "follow";
     }
 
@@ -57,7 +54,6 @@ $(function() {
       },
       success: function(data) {
         if (data["status"] == "true") {
-          alert(data["status"]);
           $("#btnFollow").text(text);
           $("#btnFollow").attr("class", "btn " + cssClass);
           $("#btnFollow").attr("data-action", action);
