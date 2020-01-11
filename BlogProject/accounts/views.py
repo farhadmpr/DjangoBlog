@@ -3,8 +3,12 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
-from .forms import UserLoginForm, UserRegisterForm, EditProfileForm, MobileLoginForm
+from .forms import UserLoginForm, UserRegisterForm, EditProfileForm, MobileLoginForm, MobileVerifyForm
 from blog.models import Article
+from random import randint
+from kavenegar import *
+from django.conf import settings
+from django import forms
 
 # Create your views here.
 
@@ -84,13 +88,41 @@ def edit_profile(request, user_id):
             messages.success(request, 'پروفایل با موفقیت ویرایش شد', 'success')
             return redirect('accounts:profile', user_id)
     else:
-        form = EditProfileForm(instance=user.profile, initial={'email':user.email})
+        form = EditProfileForm(instance=user.profile,
+                               initial={'email': user.email})
     return render(request, 'accounts/edit_profile.html', {'form': form})
 
 
 def mobile_login(request):
     if request.method == 'POST':
-        pass
+        form = MobileLoginForm(request.POST)
+        if form.is_valid():
+            mobile = f"0{form.cleaned_data['mobile']}"
+            verify_code = randint(1000, 9999)
+            api = KavenegarAPI(settings.KAVENEGAR_API_KEY)
+            params = {
+                'sender': '',
+                'receptor': mobile,
+                'message': f'Django Code: {verify_code}',
+            }
+            api.sms_send(params)
+            return redirect('accounts:mobile_verify', mobile, verify_code)
     else:
         form = MobileLoginForm()
-    return render(request, 'accounts/mobile_login.html', {'form':form})
+    return render(request, 'accounts/mobile_login.html', {'form': form})
+
+
+def mobile_verify(request, mobile, verify_code):
+    if request.method == 'POST' :
+        form = MobileVerifyForm(request.POST)
+        if form.is_valid():
+            if verify_code == form.cleaned_data['code']:
+                user = get_object_or_404(User, profile__mobile=mobile)
+                login(request, user)
+                messages.success(request, 'با موفقیت وارد شدید', 'success')
+                return redirect('blog:index')
+            else:
+                messages.error(request, 'کد اشتباه است', 'warning')
+    else:
+        form = MobileVerifyForm()
+    return render(request, 'accounts/mobile_verify.html', {'form':form}) 

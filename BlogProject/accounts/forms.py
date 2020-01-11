@@ -84,3 +84,14 @@ class EditProfileForm(forms.ModelForm):
 
 class MobileLoginForm(forms.Form):
     mobile = forms.IntegerField()
+
+    def clean_mobile(self):
+        mobile = Profile.objects.filter(mobile=self.cleaned_data['mobile'])
+        if not mobile.exists():
+            raise forms.ValidationError('شماره موبایل وجود ندارد')
+        return self.cleaned_data['mobile']
+
+
+
+class MobileVerifyForm(forms.Form):
+    code = forms.IntegerField()

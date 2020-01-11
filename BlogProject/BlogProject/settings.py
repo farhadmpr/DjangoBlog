@@ -22,6 +22,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'xv+(zt7@0^d*5F-r?c37^3=r1mh_&jhm1__&q!5s_bz1r5b&z4'
 
+KAVENEGAR_API_KEY = '476639676E6870714E35706D637650444C54376154624E4A4D2F5274334E7351'
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
