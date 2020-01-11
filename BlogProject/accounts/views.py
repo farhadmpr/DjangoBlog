@@ -79,8 +79,10 @@ def edit_profile(request, user_id):
         form = EditProfileForm(request.POST, instance=user.profile)
         if form.is_valid():
             form.save()
+            user.email = form.cleaned_data['email']
+            user.save()
             messages.success(request, 'پروفایل با موفقیت ویرایش شد', 'success')
             return redirect('accounts:profile', user_id)
     else:
-        form = EditProfileForm(instance=user.profile)
+        form = EditProfileForm(instance=user.profile, initial={'email':user.email})
     return render(request, 'accounts/edit_profile.html', {'form': form})
