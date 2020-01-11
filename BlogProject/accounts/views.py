@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from .forms import UserLoginForm, UserRegisterForm, EditProfileForm, MobileLoginForm, MobileVerifyForm
 from blog.models import Article
+from .models import UserRelation
 from random import randint
 from kavenegar import *
 from django.conf import settings
@@ -65,14 +66,16 @@ def user_logout(request):
 
 
 def user_profile(request, user_id):
-    user = get_object_or_404(User, id=user_id)
+    user = get_object_or_404(User, id=user_id)    
     articles = Article.published.filter(writer=user)
     is_profile_owner = request.user.is_authenticated and request.user.id == user.id
+    is_following = UserRelation.objects.filter(from_user=request.user, to_user=user).exists()
     return render(request, 'accounts/profile.html',
                   {
                       'user': user,
                       'articles': articles,
-                      'is_profile_owner': is_profile_owner
+                      'is_profile_owner': is_profile_owner,
+                      'is_following': is_following,
                   })
 
 
@@ -129,3 +132,11 @@ def mobile_verify(request, mobile, verify_code):
     else:
         form = MobileVerifyForm()
     return render(request, 'accounts/mobile_verify.html', {'form': form})
+
+
+def follow(request):
+    pass
+
+
+def unfollow(request):
+    pass

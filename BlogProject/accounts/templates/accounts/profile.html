@@ -1,11 +1,22 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block js %}
+    <script src="{% static 'accounts/js/script.js' %}"></script>
+{% endblock js %}
 
 {% block content %}
     <h3>{{ user.username }} profile</h3>
     {% if is_profile_owner %}
         <a href="{% url 'accounts:edit_profile' request.user.id %}">Edit profile</a>
+    {% else %}
+        {% if is_following %}
+            <button id="unfollow" class="btn btn-secondary">Unfollow</button>
+        {% else %}
+            <button id="follow" class="btn btn-primary">Follow</button>
+        {% endif %}        
     {% endif %}    
-    <p class="mt-3">{{ user.profile.bio }}</p>
+    <p class="mt-3">{{ user.profile.bio }}</p>    
     <hr>
     <h5>Posts:</h5>
     <ul>
