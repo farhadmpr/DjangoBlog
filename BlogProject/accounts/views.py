@@ -116,7 +116,7 @@ def mobile_login(request):
 
 
 def mobile_verify(request, mobile, verify_code):
-    if request.method == 'POST' :
+    if request.method == 'POST':
         form = MobileVerifyForm(request.POST)
         if form.is_valid():
             if verify_code == form.cleaned_data['code']:
@@ -128,4 +128,4 @@ def mobile_verify(request, mobile, verify_code):
                 messages.error(request, 'کد اشتباه است', 'warning')
     else:
         form = MobileVerifyForm()
-    return render(request, 'accounts/mobile_verify.html', {'form':form}) 
+    return render(request, 'accounts/mobile_verify.html', {'form': form})

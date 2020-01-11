@@ -18,4 +18,20 @@ def save_profile(sender, **kwargs):
         p.save()
 
 
+# signal
 post_save.connect(save_profile, sender=User)
+
+
+
+class UserRelation(models.Model):
+    from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='follower')
+    to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='following')
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ('-created', )
+
+    def __str__(self):
+        return f'{self.from_user} follow {self.to_user}'
+
+    
