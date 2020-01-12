@@ -50,7 +50,7 @@ class Article(models.Model):
 
     def get_absolute_url(self):
         return reverse('blog:details', args=[self.id, self.slug])
-        #return reverse('blog:details', args=[self.id, slugify(self.slug, allow_unicode=True) ])
+        # return reverse('blog:details', args=[self.id, slugify(self.slug, allow_unicode=True) ])
 
 
 class Comment(models.Model):
@@ -62,3 +62,9 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.message[:100]
+
+
+class Vote(models.Model):
+    article = models.ForeignKey(Article, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)

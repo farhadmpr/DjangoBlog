@@ -55,7 +55,7 @@ $(function() {
       success: function(data) {
         if (data["status"] == "true") {
           $("#btnFollow").text(text);
-          $("#btnFollow").attr("class", "btn " + cssClass);
+          $("#btnFollow").attr("class", cssClass);
           $("#btnFollow").attr("data-action", action);
         }
       }
