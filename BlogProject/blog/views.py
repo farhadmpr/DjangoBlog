@@ -1,7 +1,7 @@
 from django.db.models import Q
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from .models import Article, Category, Comment, Tag
+from .models import Article, Category, Comment, Tag, Vote
 from .forms import CommentForm, AddArticleForm, EditArticleForm
 from django.utils.text import slugify
 from django.contrib import messages
@@ -43,6 +43,8 @@ def details(request, id, slug):
     article.view_count += 1
     article.save()
 
+    can_like = article.user_can_like(request.user)
+
     if request.method == 'POST':
         form = CommentForm(request.POST)
         if form.is_valid():
@@ -51,7 +53,7 @@ def details(request, id, slug):
                 message=message, writer=request.user, article=article)
             comment.save()
 
-    return render(request, 'blog/details.html', {'article': article, 'comments': comments})
+    return render(request, 'blog/details.html', {'article': article, 'comments': comments, 'can_like':can_like})
 
 
 def categories(request, id):
@@ -112,6 +114,20 @@ def delete_article(request, article_id):
     return redirect('accounts:profile', request.user.id)
 
 
+@login_required
+def like_article(request, article_id):
+    article = get_object_or_404(Article, id=article_id)
+    if article.user_can_like(request.user):
+        vote = Vote(article=article, user=request.user)
+        vote.save()
+        messages.success(request, 'لایک ثبت شد', 'success')
+    else:
+        article.vote_set.filter(user=request.user).delete()
+        messages.error(request, 'لایک حذف شد', 'danger')
+    
+    return redirect('blog:details', article.id, article.slug)
+
+# rest framework
 class ArticleViewSet(viewsets.ModelViewSet):
     queryset = Article.objects.all()  # .order_by('-created')
     serializer_class = ArticleSerializer

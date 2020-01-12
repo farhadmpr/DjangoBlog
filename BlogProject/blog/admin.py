@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Article, Category, Comment, Tag
+from .models import Article, Category, Comment, Tag, Vote
 
 from jalali_date.admin import ModelAdminJalaliMixin, StackedInlineJalaliMixin, TabularInlineJalaliMixin
 from jalali_date import datetime2jalali, date2jalali
@@ -9,6 +9,7 @@ from jalali_date import datetime2jalali, date2jalali
 admin.site.register(Category)
 admin.site.register(Comment)
 admin.site.register(Tag)
+admin.site.register(Vote)
 
 @admin.register(Article)
 # class ArticleAdmin(admin.ModelAdmin):

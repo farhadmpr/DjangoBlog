@@ -52,6 +52,16 @@ class Article(models.Model):
         return reverse('blog:details', args=[self.id, self.slug])
         # return reverse('blog:details', args=[self.id, slugify(self.slug, allow_unicode=True) ])
 
+    def like_count(self):
+        return self.vote_set.count()
+
+    def __str__(self):
+        return self.title
+    
+    # inside models, "request" not accessible
+    def user_can_like(self, user):
+        return not user.vote_set.filter(article=self).exists()
+
 
 class Comment(models.Model):
     writer = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -68,3 +78,7 @@ class Vote(models.Model):
     article = models.ForeignKey(Article, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.user} liked {self.article}'
+    

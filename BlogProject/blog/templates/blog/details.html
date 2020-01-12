@@ -16,7 +16,23 @@
                     {% for tag in article.tags.all %}
                         <a href="/?tag={{ tag.id }}" class="badge badge-pill badge-info">{{ tag.title }}</a>
                     {% endfor %}
-                </div>                
+                </div> 
+                <hr>
+                <div>
+                    {% if request.user.is_authenticated %}
+                        <a href="{% url 'blog:like_article' article.id %}">
+                            <i class="fa 
+                                {% if can_like %}
+                                    fa-heart-o
+                                {% else %}
+                                    fa-heart
+                                {% endif %} fa-2x" 
+                                style="color:red;"></i>
+                        </a>
+                        <span class="ml-2">{{ article.like_count }} Likes</span>
+
+                    {% endif %}
+                </div>               
             </p>            
             <hr>
             <h3>Comments</h3>
