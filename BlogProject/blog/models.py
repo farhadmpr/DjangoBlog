@@ -74,6 +74,7 @@ class Comment(models.Model):
         return self.message[:100]
 
 
+# Article vote
 class Vote(models.Model):
     article = models.ForeignKey(Article, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -82,3 +83,8 @@ class Vote(models.Model):
     def __str__(self):
         return f'{self.user} liked {self.article}'
     
+
+class CommentVote(models.Model):
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
+    users = models.ManyToManyField(User)
+    created = models.DateTimeField(auto_now_add=True)
