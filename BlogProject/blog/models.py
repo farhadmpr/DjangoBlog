@@ -86,5 +86,5 @@ class Vote(models.Model):
 
 class CommentVote(models.Model):
     comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
-    users = models.ManyToManyField(User)
+    users = models.ForeignKey(User, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)

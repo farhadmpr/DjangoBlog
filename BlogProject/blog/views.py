@@ -1,4 +1,4 @@
-from django.db.models import Q
+from django.db.models import Q, Count, Subquery, OuterRef
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Article, Category, Comment, Tag, Vote
@@ -33,6 +33,13 @@ def index(request):
     else:
         articles = Article.published.all().order_by('-publish')
 
+    # همه دسته ها به اضافه عنوان مقاله داخل آن دسته که بیشترین تعداد تگ را داشته باشد
+    article_subquery = Article.objects.filter(category=OuterRef('pk')).annotate(
+        tags_count=Count('tags')).order_by('-tags_count')
+    cats_articles = Category.objects.annotate(
+        best_article=Subquery(article_subquery.values('title')[:1]))
+    ####
+
     return render(request, 'blog/index.html', {'articles': articles, 'categories': categories})
 
 
@@ -53,7 +60,7 @@ def details(request, id, slug):
                 message=message, writer=request.user, article=article)
             comment.save()
 
-    return render(request, 'blog/details.html', {'article': article, 'comments': comments, 'can_like':can_like})
+    return render(request, 'blog/details.html', {'article': article, 'comments': comments, 'can_like': can_like})
 
 
 def categories(request, id):
@@ -124,10 +131,12 @@ def like_article(request, article_id):
     else:
         article.vote_set.filter(user=request.user).delete()
         messages.error(request, 'لایک حذف شد', 'danger')
-    
+
     return redirect('blog:details', article.id, article.slug)
 
 # rest framework
+
+
 class ArticleViewSet(viewsets.ModelViewSet):
     queryset = Article.objects.all()  # .order_by('-created')
     serializer_class = ArticleSerializer
