@@ -5,11 +5,10 @@ from .models import Article, Category, Comment, Tag, Vote
 from .forms import CommentForm, AddArticleForm, EditArticleForm
 from django.utils.text import slugify
 from django.contrib import messages
+from django.views.generic.list import ListView
 
 from rest_framework import viewsets
 from .serializers import ArticleSerializer
-
-# Create your views here.
 
 
 def index(request):
@@ -134,9 +133,14 @@ def like_article(request, article_id):
 
     return redirect('blog:details', article.id, article.slug)
 
+
+class CategoryList(ListView):    
+    model = Category
+    ordering = ['title']
+    context_object_name = 'categories'
+
+
 # rest framework
-
-
 class ArticleViewSet(viewsets.ModelViewSet):
     queryset = Article.objects.all()  # .order_by('-created')
     serializer_class = ArticleSerializer
