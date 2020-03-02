@@ -5,7 +5,7 @@ A simple Blog with django and python.
 
 ## How to run
 
-To run Bestoon in development mode; Just use steps below:
+To run Blog in development mode; Just use steps below:
 
 1. Install `python3`, `pip` in your system.
 2. Clone the project `https://github.com/farhadmpr/djangoblog`.
